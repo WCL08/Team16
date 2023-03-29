@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- 부트스트랩 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!--jQuery , Fetch -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <title>네33</title>
+
+
+    <style>
+        /* 카드 탭탭 */
+        .tab-link {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.on {
+            display: block;
+        }
+
+
+
+        /* 블라인드 값 */
+        .blind {
+            position: absolute;
+            clip: rect(0 0 0 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+        }
+
+
+        /* 레이아웃 설정 */
+        .container {
+            display: flex;
+            min-width: 777px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            
+        }
+
+        /* 상단 좌측 */
+        .svc_name {
+            background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
+            width: 148px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 상단 우측 로그인 */
+        .gnb_btn_login {
+
+            margin-left: 300px;
+            float:left;
+        }
+        /* 상단 우측 */
+        .top_right {
+            height: 50px;
+
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            text-align: right;
+            float:left;
+        }
+
+        /* 검색창 */
+        .serch_area {
+            display: inline-block;
+            height: 40px;
+            margin-left: 10px;
+        }
+        
+
+        /* 상단 탭 */
+        .top_area {
+            display: flex;
+            flex-direction: row;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            min-width: 777px;
+            
+        }
+
+
+
+        /* 좌측 탭 */
+        .left_tab {
+            width: 148px;
+            height: 550px;
+            background: #2b2b2b;
+            margin-right: 30px;
+            margin-left: -6px;
+        }
+        
+        /* 우측 탭 */
+        .right_tab {
+            padding-top: 20px;
+            padding-left: 10px;
+            background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
+            width: 600px;
+            color: white;
+        }
+
+        
+        /* 하이퍼링크 파란글씨, 밑줄 없애기  */
+        a {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            color: white;
+        }
+    </style>
+
+    <script>
+
+        fetch('/https://movie.naver.com/', { method: "POST", body: formData })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+            })
+    </script>
+
+</head>
+
+<body style = "background: #727272 url(https://ssl.pstatic.net/static/movie/2012/06/body_bg.png) repeat;">
+    <!-- 상단 배너? -->
+    <div class="top_area">
+        <!-- 네이버랑 영화버튼 -->
+        <h1 class="svc_name">
+
+            <!-- naver 버튼 -->
+            <a href="http://www.naver.com/" title="naver로 바로가기" class="ci_logo" id="lnb_gonaver"><img
+                    src="https://ssl.pstatic.net/static/movie/2013/07/logo_ci.png" width="62" height="13"
+                    alt="NAVER"></a>
+
+            <!-- 영화 버튼 -->
+            <a href="index.html" title="영화서비스홈으로 바로가기" class="svc_logo"><img
+                    src="https://ssl.pstatic.net/static/movie/2012/06/logo_svc.png" width="34" height="19" alt="영화"></a>
+        </h1>
+
+        <!-- 상단 오른쪽 탭 -->
+        <div class="top_right">
+            <!-- 로그인 -->
+            <a class="gnb_btn_login" href="https://nid.naver.com/nidlogin.login" id="gnb_login_button"><span
+                    class="gnb_bg"></span><span class="gnb_bdr"></span><span class="gnb_txt">로그인</span></a>
+
+            <!-- 검색창 -->
+            <div class="serch_area">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="카테고리 검색" aria-label="Recipient's username"
+                        aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+                </div>
+            </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <!-- 좌측 탭 -->
+
+    <div class="container">
+        <div id="newsstand" class="sc_newscast">
+            <div class="left_tab">
+                <ul class="navi">
+                    <li>
+                        <a href="index.html" title="영화홈" class="menu01_on"><strong>영화홈</strong></a><!-- N=a:LNB.home -->
+                    </li>
+                    <li>
+                        <a href="/movie/running/current.naver" title="상영작·예정작"
+                            class="menu02"><strong>상영작·예정작</strong></a>
+
+                    </li>
+                    <li>
+                        <a href="/movie/sdb/rank/rmovie.naver" title="영화랭킹"
+                            class="menu03"><strong>영화랭킹</strong></a><!-- N=a:LNB.db -->
+                    </li>
+
+
+                    <li>
+                        <a href="/movie/point/af/list.naver" title="평점·리뷰"
+                            class="menu07"><strong>평점·리뷰</strong></a><!-- N=a:LNB.comm -->
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+        <!-- 우측 탭 -->
+
+        <div class="right_tab">
+            
+                <a class="tab-link on" class = "right_tab_font_1" data-type="tab-1">박스오피스</a>
+                <a class="tab-link" class = "right_tab_font_2" data-type="tab-2">현재상영작</a>
+                <a class="tab-link" class = "right_tab_font_3" data-type="tab-3">개봉예정작</a>
+            
+            <hr />
+            <!-- 영화 카드 -->
+
+            <div id="tab-1" class="tab-content on">
+                <div class="row row-cols-1 row-cols-md-5 g-3" id="cards-box">
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-2" class="tab-content">
+                <div class="row row-cols-1 row-cols-md-5 g-3" id="cards-box">
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-3" class="tab-content">
+                <div class="row row-cols-1 row-cols-md-5 g-3" id="cards-box">
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg"
+                                class="card-img-top">
+                            <div class="card-body">
+                                <p>⭐⭐⭐</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- 탭 돌리기  -->
+        <script>
+            $('.tab-link').click(function () {
+                var tab_id = $(this).attr('data-type');
+                $('.tab-link').removeClass('on');
+                $('.tab-content').removeClass('on');
+                $(this).addClass('on');
+                $('#' + tab_id).addClass('on');
+            });
+        </script>
+    </div>
+    </div>
+    </div>
+    </div>
+
+</body>
+
+</html>
