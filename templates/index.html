@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- 부트스트랩 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <!--jQuery , Fetch -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+  <title>영화네이버</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,500,0,200" />
+  <style>
+    .banner {
+      height: 240px;
+      width: 100%;
+
+
+      background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
+      background-position: center;
+      background-size: cover;
+
+
+
+      color: #669900;
+      font-size: la;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 카드 탭탭 */
+    .tab-link {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .tab-link:hover {
+      color: #669900;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.on {
+      display: block;
+    }
+
+    /* 블라인드 값 */
+    /* .blind {
+            position: absolute;
+            clip: rect(0 0 0 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+        } */
+
+
+    /* 레이아웃 설정 */
+    .container {
+      display: flex;
+      min-width: 777px;
+      flex-direction: row;
+      justify-content: center;
+
+    }
+
+    /* 상단 좌측 */
+    .svc_name {
+      background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
+      width: 148px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 상단 우측 로그인 */
+    .gnb_btn_login {
+
+      margin-left: 300px;
+      float: left;
+    }
+
+    /* 상단 우측 */
+    .top_right {
+      height: 50px;
+
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      text-align: right;
+      float: left;
+    }
+
+    /* 검색창 */
+    .serch_area {
+      display: inline-block;
+      height: 40px;
+      margin-left: 10px;
+    }
+
+
+    /* 상단 탭 */
+    .top_area {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 777px;
+
+    }
+
+
+    /* 좌측 탭 */
+    .left_tab {
+      position: relative;
+      margin-top: 6px;
+      width: 176px;
+      height: 700px;
+      background: #2d2d2d;
+      margin-right: 30px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .below-login {
+      position: absolute;
+      top: 220px;
+    }
+
+    .below-login-item {
+      text-align: center;
+      margin-bottom: 6px;
+      color: #669900;
+    }
+
+    .navi {
+      top: 50%;
+    }
+
+    /* 우측 탭 */
+    .right_tab {
+      position: relative;
+      padding-top: 30px;
+      padding: 30px 10px 0px 10px;
+      background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
+      width: 870px;
+      color: white;
+      border-radius: 4px;
+      min-height: 720px;
+      padding-bottom: 14px;
+    }
+
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+
+    /* 하이퍼링크 파란글씨, 밑줄 없애기  */
+    a {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
+
+  <script>
+
+  </script>
+
+</head>
+
+<body style="background: #727272 url(https://ssl.pstatic.net/static/movie/2012/06/body_bg.png) repeat;">
+  <div class="top_area">
+    <div class="banner">Banner</div>
+  </div>
+  <!-- 좌측 탭 -->
+  <div class="container">
+    <div id="newsstand" class="sc_newscast">
+      <div class="left_tab">
+        <div id="auth-container">
+          <div class="tabs">
+            <div class="tab active-tab">로그인</div>
+            <div class="tab">회원가입</div>
+          </div>
+          <!-- logout -->
+          <div class="logout">
+            <div class="greeting">Welcome! {{nickname}}</div>
+            <button id="logout-btn" onclick="onLogoutEvent()">Logout</button>
+          </div>
+          <!-- tabs section -->
+          <div class="input-tabs-section">
+            <!-- login -->
+            <div id="login-section" class="user-tab-content">
+              <div id="login-input" class="input-label">
+                <div id="id-input">
+                  <label for="login-id">ID</label>
+                  <div class="input-box">
+                    <input type="text" class="input" id="login-id" placeholder=" ID">
+                  </div>
+                </div>
+                <div id=password-input>
+                  <label for="login-pw">Password</label>
+                  <div class="input-box">
+                    <input type="password" class="input" id="login-pw" placeholder=" Password">
+                  </div>
+                </div>
+              </div>
+              <button id=login-btn class="button" onclick="login()">Login</button>
+            </div>
+            <!-- register -->
+            <div id="register-section" class="user-tab-content">
+              <div id="register-input" class="input-label">
+                <div id="user-id-input">
+                  <label class="label" for="reg-id">ID</label>
+                  <div class="input-box">
+                    <input type="text" class="input" id="reg-id" aria-describedby="emailHelp" placeholder=" ID">
+                  </div>
+                </div>
+                <div id="user-pw-input">
+                  <label class="label" for="reg-pw">Password</label>
+                  <div class="input-box">
+                    <input type="password" class="input" id="reg-pw" placeholder=" Password">
+                  </div>
+                </div>
+                <div id="nickname-input">
+                  <label class="label" for="reg-nick">Nickname</label>
+                  <div class="input-box">
+                    <input type="text" class="input" id="reg-nick" placeholder=" Nickname">
+                  </div>
+                </div>
+              </div>
+              <button id="register-btn" class="button" onclick="register()">Register</button>
+            </div>
+          </div>
+        </div>
+        <div id="below-login-container" class="below-login">
+          <a href="/page1?data=www.google.com">link 1</a>
+          <!-- <button onclick="getsomedata()">getjson</button> -->
+          <div class="below-login-item">link 1</div>
+        </div>
+      </div>
+    </div>
+    <div class="right_tab">
+    </div>
+    <span id="back-to-top-button" class="material-symbols-rounded" onclick="scrollToTop()">arrow_circle_up</span>
+</body>
+
+</html>
