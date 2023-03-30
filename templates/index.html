@@ -1,283 +1,272 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+  <!-- 부트스트랩 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>스파르타 피디아123</title>
+  <!--jQuery , Fetch -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 
-    <style>
-        * {
-            font-family: 'Gowun Dodum', sans-serif;
-        }
+  <title>영화네이버</title>
 
-        .mytitle {
-            width: 100%;
-            height: 250px;
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
 
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
-            background-position: center;
-            background-size: cover;
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,500,0,200" />
+  <style>
+    .banner {
+      height: 240px;
+      width: 100%;
 
-            color: white;
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+      background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
+      background-position: center;
+      background-size: cover;
 
-        .mytitle>button {
-            width: 200px;
-            height: 50px;
 
-            background-color: transparent;
-            color: white;
 
-            border-radius: 50px;
-            border: 1px solid white;
+      color: #669900;
+      font-size: la;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-            margin-top: 10px;
-        }
+    /* 카드 탭탭 */
+    .tab-link {
+      display: inline-block;
+      cursor: pointer;
+    }
 
-        .mytitle>button:hover {
-            border: 2px solid white;
-        }
+    .tab-link:hover {
+      color: #669900;
+    }
 
-        .mycomment {
-            color: gray;
-        }
+    .tab-content {
+      display: none;
+    }
 
-        .mycards {
-            margin: 20px auto 0px auto;
-            width: 95%;
-            max-width: 1200px;
-        }
+    .tab-content.on {
+      display: block;
+    }
 
-        .mypost {
-            width: 95%;
-            max-width: 500px;
-            margin: 20px auto 0px auto;
-            padding: 20px;
-            box-shadow: 0px 0px 3px 0px gray;
+    /* 블라인드 값 */
+    /* .blind {
+            position: absolute;
+            clip: rect(0 0 0 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+        } */
 
-            display: none;
-        }
 
-        .mybtns {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
+    /* 레이아웃 설정 */
+    .container {
+      display: flex;
+      min-width: 777px;
+      flex-direction: row;
+      justify-content: center;
 
-            margin-top: 20px;
-        }
+    }
 
-        .mybtns>button {
-            margin-right: 10px;
-        }
+    /* 상단 좌측 */
+    .svc_name {
+      background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
+      width: 148px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .card-body .btn {
-            float: right;
-        }
-    </style>
-    <script>
-        // 새로고침시 기존에 값 유지방법? (세션 스토리지와 로컬 스토리지 , 토큰) 검색.
-        // onload ? load ?  공부하기!!
-        // $(window).load(function(){
-        //     // 전부(스크립, DOM) 로딩 완료되었을 때 
-        // })
+    /* 상단 우측 로그인 */
+    .gnb_btn_login {
 
-        // 현재는 MongoDB 데이터베이스로 flag에 Boolean(true, false)값을 줘서, 재로딩 후 포스팅 또 해버리는 현상 막았음.
-        // 로컬이나 세션으로도 재로딩되면서 포스팅 또 해버리는 현상 막는 방법 있는지 알아보기.
-        // localStorage.setItem('flag', true)
-        $(document).ready(async function () {
-            let flag = await checking()
-            if (flag === true) {
-                await crawling();
-                await listing();
-            } else {
-                await listing();
-            }
-        });
+      margin-left: 300px;
+      float: left;
+    }
 
-        function listing() {
-            $("#cards-box").empty()
-            fetch('/movie')
-                .then((res) => res.json())
-                .then((data) => {
-                    let rows = data["movie_list"]
-                    rows.forEach(a => {
-                        let num = a['num']
-                        let title = a["title"]
-                        let image = a["image"]
-                        let star_count = a["star"]
-                        let comment = a["comment"]
-                        let desc = a["desc"]
-                        console.log(typeof (star_count)) // >>> 여기서 star_count는 float 실수( 9.xx ) 형태임. CSS 공부해서 네이버처럼 10점 만점으로 9.8점이면 98%만 별 칠하던가, 그게 힘들면 소수점 덜어주려면 Math.floor 쓰던가 해야함. number 형태로 바꿔줘야 함.
-                        // star_count = Number(a["star"])
+    /* 상단 우측 */
+    .top_right {
+      height: 50px;
 
-                        let star = '⭐'.repeat(star_count)
-                        // src = "${image}" 가 아니라 그냥 src = ${image} 해도 오류 발생 안하네?!
-                        let temp_html = `<div class="col">
-                                            <div class="card h-100">
-                                                <img src=${image}
-                                                    class="card-img-top">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">${title}</h5>
-                                                    <p class="card-text">${desc}</p>
-                                                    <p>${star}</p>
-                                                    <p class="mycomment">${comment}</p>
-                                                    <button onclick="edit_comment(${num, comment})" type="button" class="btn btn-outline-dark">수정하기</button>
-                                                    <button onclick="delete_post(${num});" type="button" class="btn btn-outline-dark">삭제하기</button>
-                                                </div>
-                                            </div>
-                                        </div>`
-                        $("#cards-box").append(temp_html)
-                    });
-                })
-        }
-        // 수정하기 버튼을 누르면 수정할 수 있는 칸이 나타나야 함.
-        // 현재 보여지는 comment 밑에 수정하기 부분은 display:none 으로 안보이게 했다가
-        // 수정하기 버튼을 누르면 나타나게 해야함.
-        // 수정하기 상위 블록은 display:none 했다가 javascript jquery로 버튼 누르면 클래스 붙이도록해서 display:block 이런 방향으로 가야 할 듯.
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      text-align: right;
+      float: left;
+    }
 
-        // --------------------------------------------------------------------------------------------
-        // flag 상태 체크 flag가 true면 포스팅이루어지고, flag가 false면 크롤링 또해서 재포스팅하는 현상 막음.
-        async function checking() {
-            let flag;
-            await fetch('/movie/flag')
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data)
-                    flag = data["flag"]
-                    console.log(data)
-                    flag = data["flag"]["flag"]
-                })
-            return flag
-        }
+    /* 검색창 */
+    .serch_area {
+      display: inline-block;
+      height: 40px;
+      margin-left: 10px;
+    }
 
-        // --------------------------------------------------------------------------------------------
-        // 크롤링
-        function crawling() {
-            let test = "test start"
-            console.log("test start")
-            let formData = new FormData();
-            formData.append("test_give", test)
 
-            fetch('/movie', { method: "POST", body: formData })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data)
-                    window.location.reload()
-                })
-                .catch((error) => console.log(error));
-        }
+    /* 상단 탭 */
+    .top_area {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-width: 777px;
 
-        // --------------------------------------------------------------------------------------------
-        // 포스트별 고유 num 찾아서 포스트 삭제
-        function delete_post(num) {
-            let formData = new FormData();
-            formData.append("num_give", num)
+    }
 
-            fetch('/movie/delete', { method: "POST", body: formData })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data)
-                    alert(data['msg'])
-                    window.location.reload()
-                })
-                .catch((error) => {
-                    console.log("delete failed: ", error)
-                })
-        }
-        // --------------------------------------------------------------------------------------------
-        function edit_comment(num, comment) {
-            let formData = new FormData();
-            formData.append("num_give", num)
-            formData.append("comment_give", comment)
 
-            fetch('/movie/edit', { method: "POST", body: formData })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log(data)
-                    alert(data['msg'])
-                    window.location.reload()
-                })
-                .catch((error) => {
-                    console.log("edit failed: ", error)
-                })
-        }
+    /* 좌측 탭 */
+    .left_tab {
+      position: relative;
+      margin-top: 6px;
+      width: 176px;
+      height: 700px;
+      background: #2d2d2d;
+      margin-right: 30px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+    }
 
-        function open_box() {
-            $('#post-box').show()
-        }
-        function close_box() {
-            $('#post-box').hide()
-        }
-    </script>
+    .below-login {
+      position: absolute;
+      top: 220px;
+    }
+
+    .below-login-item {
+      text-align: center;
+      margin-bottom: 6px;
+      color: #669900;
+    }
+
+    .navi {
+      top: 50%;
+    }
+
+    /* 우측 탭 */
+    .right_tab {
+      position: relative;
+      padding-top: 30px;
+      padding: 30px 10px 0px 10px;
+      background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
+      width: 870px;
+      color: white;
+      border-radius: 4px;
+      min-height: 720px;
+      padding-bottom: 14px;
+    }
+
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+
+    /* 하이퍼링크 파란글씨, 밑줄 없애기  */
+    a {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      color: white;
+    }
+  </style>
+
+  <script>
+
+  </script>
+
 </head>
 
-<body>
-    <div class="mytitle">
-        <h1>내 생애 최고의 영화들</h1>
-        <button onclick="open_box()">영화 기록하기</button>
-    </div>
-    <div class="mypost" id="post-box">
-        <div class="form-floating mb-3">
-            <input id="url" type="email" class="form-control" placeholder="name@example.com">
-            <label>영화URL</label>
-        </div>
-        <!-- <div class="input-group mb-3" style="margin-top: 20px"> 부트스트랩 default style을 이런식으로 스타일 변경도 가능하다. -->
-        <!-- 기록하기 구역은 뺄거임. -->
-        <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">별점</label>
-            <select class="form-select" id="star_give">
-                <option selected>-----선택하기-----</option>
-                <option value="1">⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐⭐⭐</option>
-            </select>
-        </div>
-        <div class="form-floating">
-            <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
-            <label for="floatingTextarea2">코멘트</label>
-        </div>
-        <div class="mybtns">
-            <button onclick="" type="button" class="btn btn-dark">기록하기</button>
-            <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
-        </div>
-    </div>
-    <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
-            <div class="col">
-                <div class="card h-100">
-                    <img src="https://movie.naver.com/movie/bi/mi/basic.naver?code=217747" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">웅남이</h5>
-                        <p class="card-text">인간을 초월하는 짐승 같은 능력으로 국제 범죄 조직에 맞서는 웅남이의 좌충우돌 코미디 <웅남이>
-                        </p>
-                        <p>⭐⭐⭐</p>
-                        <p class="mycomment">코멘트</p>
-                        <button onclick="edit_comment()" type="button" class="btn btn-outline-dark">수정하기</button>
-                        <button onclick="delete_post();" type="button" class="btn btn-outline-dark">삭제하기</button>
-                    </div>
+<body style="background: #727272 url(https://ssl.pstatic.net/static/movie/2012/06/body_bg.png) repeat;">
+  <div class="top_area">
+    <div class="banner">Banner</div>
+  </div>
+  <!-- 좌측 탭 -->
+  <div class="container">
+    <div id="newsstand" class="sc_newscast">
+      <div class="left_tab">
+        <div id="auth-container">
+          <div class="tabs">
+            <div class="tab active-tab">로그인</div>
+            <div class="tab">회원가입</div>
+          </div>
+          <!-- logout -->
+          <div class="logout">
+            <div class="greeting">Welcome! {{nickname}}</div>
+            <button id="logout-btn" onclick="onLogoutEvent()">Logout</button>
+          </div>
+          <!-- tabs section -->
+          <div class="input-tabs-section">
+            <!-- login -->
+            <div id="login-section" class="user-tab-content">
+              <div id="login-input" class="input-label">
+                <div id="id-input">
+                  <label for="login-id">ID</label>
+                  <div class="input-box">
+                    <input type="text" class="input" id="login-id" placeholder=" ID">
+                  </div>
                 </div>
+                <div id=password-input>
+                  <label for="login-pw">Password</label>
+                  <div class="input-box">
+                    <input type="password" class="input" id="login-pw" placeholder=" Password">
+                  </div>
+                </div>
+              </div>
+              <button id=login-btn class="button" onclick="login()">Login</button>
             </div>
+            <!-- register -->
+            <div id="register-section" class="user-tab-content">
+              <div id="register-input" class="input-label">
+                <div id="user-id-input">
+                  <label class="label" for="reg-id">ID</label>
+                  <div class="input-box">
+                    <input type="text" class="input" id="reg-id" aria-describedby="emailHelp" placeholder=" ID">
+                  </div>
+                </div>
+                <div id="user-pw-input">
+                  <label class="label" for="reg-pw">Password</label>
+                  <div class="input-box">
+                    <input type="password" class="input" id="reg-pw" placeholder=" Password">
+                  </div>
+                </div>
+                <div id="nickname-input">
+                  <label class="label" for="reg-nick">Nickname</label>
+                  <div class="input-box">
+                    <input type="text" class="input" id="reg-nick" placeholder=" Nickname">
+                  </div>
+                </div>
+              </div>
+              <button id="register-btn" class="button" onclick="register()">Register</button>
+            </div>
+          </div>
         </div>
+        <div id="below-login-container" class="below-login">
+          <a href="/page1?data=www.google.com">link 1</a>
+          <!-- <button onclick="getsomedata()">getjson</button> -->
+          <div class="below-login-item">link 1</div>
+        </div>
+      </div>
     </div>
+    <div class="right_tab">
+    </div>
+    <span id="back-to-top-button" class="material-symbols-rounded" onclick="scrollToTop()">arrow_circle_up</span>
 </body>
 
 </html>

@@ -1,0 +1,221 @@
+/* reset */
+body,
+button,
+dd,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+legend,
+li,
+ol,
+p,
+select,
+table,
+td,
+textarea,
+th,
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+em {
+    font-style: normal;
+}
+
+button,
+input {
+    border-radius: 0;
+    border: 0;
+}
+
+.search_area .input_text::placeholder {
+    color: transparent;
+}
+
+
+* {
+    font-family: "Noto Serif KR", serif;
+}
+
+
+.review_pic {
+    width: 100%;
+    height: 200px;
+
+    background-image: linear-gradient(0deg,
+            rgba(0, 0, 0, 0.5),
+            rgba(0, 0, 0, 0.5)),
+        url("https://global-uploads.webflow.com/5e4f771ff45e4c54cb345de3/61401cbff9b93566a1e2d6b0_%2525EB%252589%2525B4%2525EC%25258A%2525A4-%2525EA%2525B7%2525B8%2525EB%2525A6%2525AC%2525EB%252593%25259C-%2525EC%25259D%2525B4%2525EB%2525AF%2525B8%2525EC%2525A7%252580-(2).png");
+    background-position: center 70%;
+    background-size: cover;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.movie_info_area {
+    position: relative;
+    /* z-index: 11; */
+    float: none;
+    margin: 0 20px;
+    padding-top: 60px;
+}
+
+.movie_info {
+    display: table;
+    position: relative;
+    /* width: 500px; */
+}
+
+.main_score {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #f0f0f0;
+    /* zoom: 1; */
+}
+
+.movie_title {
+    display: inline-block;
+    margin: 0 0 6px 0;
+}
+
+.movie_sub_title {
+    display: block;
+    overflow: hidden;
+    width: 415px;
+    height: 15px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-family: arial;
+    color: #767676;
+    letter-spacing: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.line {
+    color: #f0f0f0;
+    ;
+}
+
+.info_spec {
+    padding: 10px 0;
+    border-top: 1px solid #f0f0f0;
+    zoom: 1;
+}
+
+.step1 {
+    display: block;
+    float: left;
+    clear: left;
+    margin-right: 16px;
+    width: 35px;
+    height: 12px;
+}
+
+/* 영화 포스터 ------------------------------------------*/
+.poster {
+    background-color: aqua;
+    /* float: right; */
+    position: relative;
+    min-width: 160px;
+    min-height: 220px;
+    max-width: 203px;
+    max-height: 290px;
+
+    margin-top: 60px;
+}
+
+/* 영화 리뷰 작성 ----------------------------------------*/
+.myreview_write {
+    width: 95%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.review_btn {
+    width: 95%;
+    max-width: 500px;
+    margin: auto;
+
+    padding-top: 30px;
+    border-radius: 5px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.review_btn>button {
+    width: 200px;
+    height: 50px;
+
+    background-color: transparent;
+    color: black;
+
+    border-radius: 50px;
+    border: 1px solid gray;
+
+    margin-top: 10px;
+}
+
+.review_btn>button:hover {
+    border: 2px solid gray;
+}
+
+.myreview_btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.myreview_btns>button {
+    margin-right: 10px;
+}
+
+
+
+/* 영화 리뷰 카드 ----------------------------------------*/
+.review_cards {
+    border-top: 1px solid #f0f0f0;
+    padding-top: 30px;
+    width: 95%;
+    max-width: 500px;
+    margin: auto;
+}
+
+.mycards>.card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.del_btn {
+    width: 20px;
+}
+
+.card{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
