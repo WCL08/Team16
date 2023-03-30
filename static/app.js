@@ -143,3 +143,9 @@ window.addEventListener('load', function () {
   });
 });
 
+function getsomedata() {
+  $.getJSON('/mydata', function (data) {
+    // Handle the data here
+    console.log(data);
+  });
+}
