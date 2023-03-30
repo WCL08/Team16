@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import datetime
-import pyautogui
+# import pyautogui
 import time
 import certifi
 # jwt 토큰, 패스워드 해쉬화
@@ -27,7 +27,7 @@ SECRET_KEY = 'GROUP16'
 
 @app.route('/')
 def home():
-    return render_template('index4.html')
+    return render_template('index.html')
 
 
 @app.route("/movie/flag", methods=["GET"])

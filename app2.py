@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import datetime
-import pyautogui
+# import pyautogui
 import time
 import certifi
 from pymongo import MongoClient
