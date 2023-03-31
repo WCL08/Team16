@@ -4,6 +4,7 @@ import datetime
 # import pyautogui
 import time
 import certifi
+import json
 # jwt 토큰, 패스워드 해쉬화
 import jwt
 import hashlib
@@ -177,10 +178,153 @@ def api_login():
 	else:
 		return jsonify({'result': 'fail', 'msg': 'Incorrect ID or PW.'})
 
-@app.route('/page1')
+# @app.route('/page1')
+# def review_get():
+# 	data = request.args.get('data')
+# 	return f'Url Data passed: {data}'
+
+# ----------------------------------review page ---------------------------------------------------
+
+@app.route("/review", methods=["POST"])
+def review_post():
+    star_receive = request.form['star_give']
+    comment_receive = request.form['comment_give']
+    nickname_receive= request.form['nickname_give']
+
+
+    doc={
+        'star':star_receive,
+        'comment':comment_receive,
+        'nickname':nickname_receive
+    }
+
+    db.review.insert_one(doc)
+  
+    return jsonify({'msg':'저장 완료!'})
+
+# 이거도 일단 주석처리@@@
+@app.route("/review/getcomment", methods=["GET"])
 def review_get():
-	data = request.args.get('data')
-	return f'Url Data passed: {data}'
+    all_reviews = list(db.review.find({},{'_id':False}))
+    # return render_template('review.index.html')
+    return jsonify({'result':all_reviews})
+
+@app.route('/review/<string:nickname>', methods=['DELETE']) 
+def nickname_del(nickname): 
+    db.review.delete_one({'nickname': nickname}) 
+    return jsonify({'msg': '삭제완료!'})
+
+@app.route('/review')
+def review_get_url_and_crawl():
+    # data = request.args.get('data') / ?data=
+    # myObject = json.loads(data) >>> object 형태 {} 가 됨.
+    # url_receive = request.args.get('post')
+    url_receive = request.args.get('post')  ## >>> Object 형태
+    ul = json.loads(url_receive) 
+    url_give = ul["url"]   ## >>> url
+    ## 크롤링
+    # all_reviews = list(db.review.find({},{'_id':False}))
+    # url_receive = request.form['url_give']
+    today = datetime.datetime.today()
+    # url = url_receive
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+    res = requests.get(url_give, headers= headers)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    print(soup)
+    g = soup.select_one('dl > div:nth-child(1) > dd') ## 영화 장르  
+    o = soup.select_one('dl > div:nth-child(2) > dd') ## 영화 개봉일
+    genre = g.text.split("")[0].strip()
+    opening = o.text.strip()
+    url_receive["genre"] = genre  ## 옵젝에 추가  
+    url_receive["opening"] = opening
+    # Box = {"genre": genre, "opening": opening}
+    # for g, o in zip(genre, opening):
+    #     print(g.text.strip(), o.text.strip(), sep="\t"*2)
+    #     Box = {"genre": g.text.strip(), "opening": o.text.strip()}
+    # return jsonify({'Box': Box})
+    ## index.html 에서 post에 담아서 넘긴 객체
+    # let postBox = {
+    #                         "num": num,
+    #                         "title": title,
+    #                         "image": image,
+    #                         "star_count": star_count,
+    #                         "comment": comment,
+    #                         "desc": desc,
+    #                         "url": url
+                            # "genre": genre, "opening": opening
+
+    #                     }
+
+    ## 여기에 크롤링이 오래 걸리지 않도록 딱 2개만 크롤링 빠르게 하도록
+    ## 장르
+    ## 오프닝
+
+    ## postBox + 장르, 오프닝
+    ## 얘네를 진자?방식으로 한꺼번에 넘긴다.
+    return render_template('review.html', Box = url_receive)
+
+# @app.route('/page1')
+# def page1():
+#     post = request.args.get('post')
+
+#  ------------------------서버에서 review 들어가자마자 동시에 크롤링해서 jinja에 담아서 넘기기@@@------------------------------------ 
+# @app.route("/review", methods=["POST"])
+# def review_crawl():
+#     # all_reviews = list(db.review.find({},{'_id':False}))
+#     url_receive = request.form['url_give']
+#     today = datetime.datetime.today()
+#     url = url_receive
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+#     res = requests.get(url, headers= headers)
+#     soup = BeautifulSoup(res.text, 'html.parser')
+#     print(soup)
+#     genre = soup.select('dl > div:nth-child(1) > dd')
+#     opening = soup.select('dl > div:nth-child(2) > dd')
+#     # name = soup.select('div.tit5')
+#     # score = soup.select('td.point')
+#     # link = soup.select("div.tit5 > a[href]")
+#     Box = {}
+#     for g, o in zip(genre, opening):
+#         print(g.text.strip(), o.text.strip(), sep="\t"*2)
+#         Box = {"genre": g.text.strip(), "opening": o.text.strip()}
+#     return jsonify({'Box': Box})
+
+
+    # div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(1) > dd
+    # div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(1) > dd
+
+    # dl > div:nth-child(2) > dd
+    # main_pack > div.sc_new.cs_common_module.case_empasis.color_16._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(2) > dd
+    
+    # main_pack > div.sc_new.cs_common_module.case_empasis.color_5._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(2) > dd
+
+    
+
+    ## 개요 - 장르 (컬러가 다름)
+    # main_pack > div.sc_new.cs_common_module.case_empasis.color_5._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(1) > dd
+    # main_pack > div.sc_new.cs_common_module.case_empasis.color_16._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(1) > dd
+   
+
+    ## 개봉일자
+    # main_pack > div.sc_new.cs_common_module.case_empasis.color_5._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(2) > dd
+    # main_pack > div.sc_new.cs_common_module.case_empasis.color_16._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(2) > dd
+
+    
+
+    #main_pack > div.sc_new.cs_common_module.case_empasis.color_5._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(2)
+    #main_pack > div.sc_new.cs_common_module.case_empasis.color_5._au_movie_content_wrap > div.cm_content_wrap > div.cm_content_area._cm_content_area_info > div.cm_info_box > div.detail_info > dl > div:nth-child(2) > dd
+    #  ------------------------------------------------------------   
+
+    # @app.route('/page1')
+    # def page1():
+    #     post = request.args.get('post')
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
