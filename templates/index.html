@@ -9,6 +9,7 @@
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+        
 
         <!-- 부트스트랩 -->
         <link
@@ -41,9 +42,12 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,500,0,200"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
         <style>
             .banner {
-                height: 240px;
+                /* height: 240px;
                 width: 100%;
 
                 background-image: linear-gradient(
@@ -60,6 +64,27 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                */
+                
+
+                width: 100%;
+                height: 240px; 
+
+                background-image: linear-gradient(0deg,
+                        rgba(0, 0, 0, 0.5),
+                        rgba(0, 0, 0, 0.5)),
+                    url("https://global-uploads.webflow.com/5e4f771ff45e4c54cb345de3/61401cbff9b93566a1e2d6b0_%2525EB%252589%2525B4%2525EC%25258A%2525A4-%2525EA%2525B7%2525B8%2525EB%2525A6%2525AC%2525EB%252593%25259C-%2525EC%25259D%2525B4%2525EB%2525AF%2525B8%2525EC%2525A7%252580-(2).png");
+                background-position: center 70%;
+                background-size: cover;
+
+                color: white;
+
+                display: flex;
+                display: flex;
+                /* flex-direction: column; */
+                align-items: center;
+                justify-content: center;
+                font-size: 60px;
             }
 
             /* 카드 탭탭 */
@@ -175,7 +200,7 @@
                 padding-top: 30px;
                 padding: 30px 10px 0px 10px;
                 background: url(https://ssl.pstatic.net/static/movie/2012/09/bg_home.png);
-                width: 870px;
+                width: 1140px;
                 color: white;
                 border-radius: 4px;
                 min-height: 720px;
@@ -263,6 +288,9 @@
                 margin-top: 20px;
             }
 
+            .right_bottom {
+                height: 66px;
+            }
             .mybtns > button {
                 margin-right: 10px;
             }
@@ -270,178 +298,14 @@
             .card-body .btn {
                 float: right;
             }
+            
         </style>
-
-        <script>
-            // 새로고침시 기존에 값 유지방법? (세션 스토리지와 로컬 스토리지 , 토큰) 검색.
-            // onload ? load ?  공부하기!!
-            // $(window).load(function(){
-            //     // 전부(스크립, DOM) 로딩 완료되었을 때
-            // })
-
-            // 현재는 MongoDB 데이터베이스로 flag에 Boolean(true, false)값을 줘서, 재로딩 후 포스팅 또 해버리는 현상 막았음.
-            // 로컬이나 세션으로도 재로딩되면서 포스팅 또 해버리는 현상 막는 방법 있는지 알아보기.
-            // localStorage.setItem('flag', true)
-            $(document).ready(async function () {
-                let flag = await checking();
-                if (flag === true) {
-                    await crawling();
-                    await listing();
-                } else {
-                    await listing();
-                }
-            });
-
-            function listing() {
-                $("#cards-box").empty();
-                fetch("/movie")
-                    .then((res) => res.json())
-                    .then((data) => {
-                        let rows = data["movie_list"];
-                        rows.forEach((a) => {
-                            let num = a["num"];
-                            let title = a["title"];
-                            let image = a["image"];
-                            let star_count = a["star"];
-                            let comment = a["comment"];
-                            let desc = a["desc"];
-                            let url = a["url"]
-                            console.log(typeof star_count); // >>> 여기서 star_count는 float 실수( 9.xx ) 형태임. CSS 공부해서 네이버처럼 10점 만점으로 9.8점이면 98%만 별 칠하던가, 그게 힘들면 소수점 덜어주려면 Math.floor 쓰던가 해야함. number 형태로 바꿔줘야 함.
-                            // star_count = Number(a["star"])
-                            
-                            let postBox = {
-                                "num": num,
-                                "title": title,
-                                "image": image,
-                                "star_count": star_count,
-                                "comment": comment,
-                                "desc": desc,
-                                "url": url
-                            }
-                            // --------------얘네 주석 처리 안했었음 ...;;--------------------
-                            // const myObject = { a:1 };   
-                            const queryParams = new URLSearchParams();
-                            queryParams.append('data', JSON.stringify(postBox));
-                            // window.location.href = '/review?' + queryParams.toString();
-                            let star = "⭐".repeat(star_count);
-                            // "/review?post=${postBox}"
-                            // src = "${image}" 가 아니라 그냥 src = ${image} 해도 오류 발생 안하네?!
-                            // 문제되면 이 밑에 jinja2 방식으로 서버로 넘길 때 문제임.
-                            // "window.location.href = '/review?'+ queryParams.toString()}"
-                            let temp_html = `<a href="/review?${queryParams.toString()}" >
-                                                <div class="col">
-                                                    <div class="card h-100">
-                                                        <img src="${image}"
-                                                            class="card-img-top"/>
-                                                        <div class="card-body">
-                                                            <h5 class="card-title">${title}</h5>
-                                                            <p class="card-text">${desc}</p>
-                                                            <p>${star}</p>
-                                                            <p class="mycomment">${comment}</p>
-                                                            <button onclick="edit_comment(${
-                                                                (num, comment)
-                                                            })" type="button" class="btn btn-outline-dark">수정하기</button>
-                                                            <button onclick="delete_post(${num});" type="button" class="btn btn-outline-dark">삭제하기</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                          </a>`;
-                            $("#cards-box").append(temp_html);
-                        });
-                    });
-            }
-   
-            // 수정하기 버튼을 누르면 수정할 수 있는 칸이 나타나야 함.
-            // 현재 보여지는 comment 밑에 수정하기 부분은 display:none 으로 안보이게 했다가
-            // 수정하기 버튼을 누르면 나타나게 해야함.
-            // 수정하기 상위 블록은 display:none 했다가 javascript jquery로 버튼 누르면 클래스 붙이도록해서 display:block 이런 방향으로 가야 할 듯.
-
-            // --------------------------------------------------------------------------------------------
-            // flag 상태 체크 flag가 true면 포스팅이루어지고, flag가 false면 크롤링 또해서 재포스팅하는 현상 막음.
-            async function checking() {
-                let flag;
-                await fetch("/movie/flag")
-                    .then((res) => res.json())
-                    .then((data) => {
-                        console.log(data);
-                        flag = data["flag"];
-                        console.log(data);
-                        flag = data["flag"]["flag"];
-                    });
-                return flag;
-            }
-
-            // --------------------------------------------------------------------------------------------
-            // 크롤링
-            function crawling() {
-                let test = "test start";
-                console.log("test start");
-                let formData = new FormData();
-                formData.append("test_give", test);
-
-                fetch("/movie", { method: "POST", body: formData })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        console.log(data);
-                        window.location.reload();
-                    })
-                    .catch((error) => console.log(error));
-            }
-
-            // --------------------------------------------------------------------------------------------
-            // 포스트별 고유 num 찾아서 포스트 삭제
-            function delete_post(num) {
-                let formData = new FormData();
-                formData.append("num_give", num);
-
-                fetch("/movie/delete", { method: "POST", body: formData })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        console.log(data);
-                        alert(data["msg"]);
-                        window.location.reload();
-                    })
-                    .catch((error) => {
-                        console.log("delete failed: ", error);
-                    });
-            }
-            // --------------------------------------------------------------------------------------------
-            function edit_comment(num, comment) {
-                let formData = new FormData();
-                formData.append("num_give", num);
-                formData.append("comment_give", comment);
-
-                fetch("/movie/edit", { method: "POST", body: formData })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        console.log(data);
-                        alert(data["msg"]);
-                        window.location.reload();
-                    })
-                    .catch((error) => {
-                        console.log("edit failed: ", error);
-                    });
-            }
-
-            function open_box() {
-                $("#post-box").show();
-            }
-            function close_box() {
-                $("#post-box").hide();
-            }
-        </script>
     </head>
 
-    <body
-        style="
-            background: #727272
-                url(https://ssl.pstatic.net/static/movie/2012/06/body_bg.png)
-                repeat;
-        "
-    >
+    <body>
         <!-- 상단 배너? -->
         <div class="top_area">
-            <div class="banner">Banner</div>
+            <div class="banner">오늘의 영화 랭킹</div>
         </div>
         <div class="total-container">
             <div id="newsstand" class="sc_newscast">
@@ -551,7 +415,7 @@
                     <div id="below-login-container" class="below-login">
                         <!-- <a href="/review?data=www.google.com">link 1</a> 숨겨놓음 샘플용 --> 
 
-                        <div class="below-login-item">link 1</div>
+                        <!-- <div class="below-login-item"></div> -->
                     </div>
                 </div>
             </div>
@@ -577,13 +441,13 @@
                                     </p>
                                     <p>⭐⭐⭐</p>
                                     <p class="mycomment">코멘트</p>
-                                    <button
+                                    <!-- <button
                                         onclick="edit_comment()"
                                         type="button"
                                         class="btn btn-outline-dark"
                                     >
                                         수정하기
-                                    </button>
+                                    </button> -->
                                     <button
                                         onclick="delete_post();"
                                         type="button"

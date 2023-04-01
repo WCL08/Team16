@@ -1,10 +1,10 @@
-function showTabs() {
+async function showTabs() {
   $('.input-tabs-section').show();
   $('.tabs').show();
   $('.logout').hide();
 }
 
-function showLogout() {
+async function showLogout() {
   $('.input-tabs-section').hide();
   $('.tabs').hide();
   $('.logout').show();
@@ -19,9 +19,13 @@ function onLogoutEvent() {
   $('#reg-nick').val('');
 
   showTabs();
+  // window.location.reload();
+  listing();
 }
-
-function checkTokenExpiration() {
+async function hideAdmin(){
+  $('.deleteButton').hide()
+}
+async function checkTokenExpiration() {
   const token = $.cookie('mytoken');
   if (token) {
 
@@ -57,6 +61,8 @@ function login() {
         showLogout();
         $('.greeting').text('Welcome! ' + response['nickname']);
         checkTokenExpiration();
+        // window.location.reload();
+        listing();
       } else {
         alert(response['msg'])
       }
@@ -93,6 +99,7 @@ function register() {
     success: function (response) {
       if (response['result'] == 'success') {
         alert('You have been registered!')
+        window.location.reload();
       } else {
         alert(response['msg'])
       }
@@ -127,21 +134,33 @@ function getsomedata() {
   });
 }
 
+// 얘는 기존 거 지우면 안되는 거.
+// $(document).ready(async function () {
+//   // const token = await $.cookie('mytoken');
+//   // await checkTokenExpiration();
+//   let flag = await checking()
+//   if (flag === true) {  // movie2에서는 f 면 크롤링해라였는데, 여기서는 true면 크롤링해라 이거임.
+//     await crawling();
+//     await listing();
+    
+//   } else {
+//     await listing();
+//   }
+
+
+// 얘는 막 delete기능 사용해도 되는 거.
 $(document).ready(async function () {
-  const token = $.cookie('mytoken');
-  checkTokenExpiration();
+  // const token = await $.cookie('mytoken');
+  await checkTokenExpiration();
   let flag = await checking()
-  if (token) {
-    showLogout();
-  } else {
-    showTabs();
-  }
-  if (flag === true) {
+  if (flag === "f") {  // movie2에서는 f 면 크롤링해라였는데, 여기서는 true면 크롤링해라 이거임.
     await crawling();
     await listing();
-  } else {
+    
+  } else {    // flag가 s면
     await listing();
   }
+  
 
   $('.tab').eq(0).click(function () {
     $('#login-section').show();
@@ -158,46 +177,71 @@ $(document).ready(async function () {
   });
 });
 
-async function listing() {
-  $("#cards-box").empty()
-  fetch('/movie')
-      .then((res) => res.json())
-      .then((data) => {
-          let rows = data["movie_list"]
-          rows.forEach(a => {
-              let num = a['num']
-              let title = a["title"]
-              let image = a["image"]
-              let star_count = a["star"]
-              let comment = a["comment"]
-              let desc = a["desc"]
-              console.log(typeof (star_count)) // >>> 여기서 star_count는 float 실수( 9.xx ) 형태임. CSS 공부해서 네이버처럼 10점 만점으로 9.8점이면 98%만 별 칠하던가, 그게 힘들면 소수점 덜어주려면 Math.floor 쓰던가 해야함. number 형태로 바꿔줘야 함.
-              // star_count = Number(a["star"])
 
-              let star = '⭐'.repeat(star_count)
-              // src = "${image}" 가 아니라 그냥 src = ${image} 해도 오류 발생 안하네?!
-              let temp_html = `<div class="col">
-                                  <div class="card h-100">
-                                      <img src=${image}
-                                          class="card-img-top">
-                                      <div class="card-body">
-                                          <h5 class="card-title">${title}</h5>
-                                          <p class="card-text">${desc}</p>
-                                          <p>${star}</p>
-                                          <p class="mycomment">${comment}</p>
-                                          <button onclick="edit_comment(${num, comment})" type="button" class="btn btn-outline-dark">수정하기</button>
-                                          <button onclick="delete_post(${num});" type="button" class="btn btn-outline-dark">삭제하기</button>
-                                      </div>
-                                  </div>
-                              </div>`
-              $("#cards-box").append(temp_html)
-          });
-      })
+
+async function listing() {
+  const token = await $.cookie('mytoken');
+  await $("#cards-box").empty();
+  let queue1 = await fetch("/movie")
+  let queue2 = await queue1.json()
+  let rows = await queue2["movie_list"]
+  rows.forEach((a) => {
+    let num = a["num"];
+    let title = a["title"];
+    let image = a["image"];
+    let star_count = a["star"];
+    let comment = a["comment"];
+    let desc = a["desc"];
+    let url = a["url"]
+    console.log(typeof star_count); // >>> 여기서 star_count는 float 실수( 9.xx ) 형태임. CSS 공부해서 네이버처럼 10점 만점으로 9.8점이면 98%만 별 칠하던가, 그게 힘들면 소수점 덜어주려면 Math.floor 쓰던가 해야함. number 형태로 바꿔줘야 함.
+    // star_count = Number(a["star"])
+    
+    let postBox = {
+        "num": num,
+        "title": title,
+        "image": image,
+        "star_count": star_count,
+        "comment": comment,
+        "desc": desc,
+        "url": url
+    }
+    // --------------얘네 주석 처리 안했었음 ...;;--------------------
+    // const myObject = { a:1 };   
+    const queryParams = new URLSearchParams();
+    queryParams.append('data', JSON.stringify(postBox));  // >>> data 에 담아서 넘기는 거.
+    // window.location.href = '/review?' + queryParams.toString();
+    let star = "⭐".repeat(star_count);
+    // "/review?post=${postBox}"
+    // src = "${image}" 가 아니라 그냥 src = ${image} 해도 오류 발생 안하네?!
+    // 문제되면 이 밑에 jinja2 방식으로 서버로 넘길 때 문제임.
+    // "window.location.href = '/review?'+ queryParams.toString()}"
+    let temp_html = ` <div class="col">
+                        <div class="card h-100">
+                            <a href="/review?${queryParams.toString()}" >
+                              <img src="${image}"
+                                  class="card-img-top"/>
+                              <div class="card-body">
+                                <h5 class="card-title">${title}</h5>
+                                <p class="card-text">${desc}</p>
+                                <p class="mycomment">${comment}</p>
+                              </div>
+                            </a> 
+                            <div class="right_bottom">     
+                                <p class="rb_star">${star}</p>
+                                <button onclick="delete_post(${num});" type="button" class="btn btn-outline-dark deleteButton rb_button">삭제하기</button>
+                            </div>    
+                        </div>
+                    </div>`;
+    $("#cards-box").append(temp_html);
+  });
+  if (token) {
+    await showLogout();
+  } else {
+    await showTabs();
+    await hideAdmin();
+  };
 }
-// 수정하기 버튼을 누르면 수정할 수 있는 칸이 나타나야 함.
-// 현재 보여지는 comment 밑에 수정하기 부분은 display:none 으로 안보이게 했다가
-// 수정하기 버튼을 누르면 나타나게 해야함.
-// 수정하기 상위 블록은 display:none 했다가 javascript jquery로 버튼 누르면 클래스 붙이도록해서 display:block 이런 방향으로 가야 할 듯.
+
 
 // --------------------------------------------------------------------------------------------
 // flag 상태 체크 flag가 true면 포스팅이루어지고, flag가 false면 크롤링 또해서 재포스팅하는 현상 막음.
@@ -242,7 +286,8 @@ function delete_post(num) {
       .then((data) => {
           console.log(data)
           alert(data['msg'])
-          window.location.reload()
+          // window.location.reload()
+          listing();
       })
       .catch((error) => {
           console.log("delete failed: ", error)
@@ -266,11 +311,11 @@ function edit_comment(num, comment) {
       })
 }
 
-function open_box() {
-  $('#post-box').show()
-}
-function close_box() {
-  $('#post-box').hide()
-}
+// function open_box() {
+//   $('#post-box').show()
+// }
+// function close_box() {
+//   $('#post-box').hide()
+// }
 
 

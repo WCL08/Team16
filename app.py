@@ -1,3 +1,5 @@
+import jwt
+import hashlib
 from bs4 import BeautifulSoup
 import requests
 import datetime
@@ -5,22 +7,21 @@ import datetime
 import time
 import certifi
 import json
-# jwt 토큰, 패스워드 해쉬화
-import jwt
-import hashlib
-#
 from pymongo import MongoClient
 from flask import Flask, render_template, request, jsonify
+import re
+from bson import ObjectId
 
 app = Flask(__name__)
-
+## pip install pyjwt를 한 후에 import jwt 해서 사용해야 함.
 
 # 맥 유저들 안되면 이거 주석으로 바꾸세요.
 # ca = certifi.where()
 # client = MongoClient("mongodb+srv://sparta16:sparta16@cluster16.b0dkofq.mongodb.net/?retryWrites=true&w=majority", tlsCAFile = ca)
 client = MongoClient(
     "mongodb+srv://sparta16:sparta16@cluster16.b0dkofq.mongodb.net/?retryWrites=true&w=majority")
-db = client.movie
+# db = client.movie
+db = client.movie2
 user_db = client.group_16 #유저 db
 
 # 시크릿 키
@@ -107,7 +108,8 @@ def movie_crawl():
         docList.append({"num": num, "url": url, "title": title,
                        "image": image, "star": Crawl['star'], "desc": desc, "comment":comment})
 
-    db.movie.insert_many(docList)
+    # db.movie.insert_many(docList)
+    db.moviecur.insert_many(docList)
 
     # --------------다시 플래그 상태 바꿔서 영화 데이터 더 이상 못 불러오게 하기. --------------
     db.flag.update_one({"flag": True}, {"$set": {"flag": False}})
@@ -119,17 +121,19 @@ def movie_crawl():
 
 @app.route("/movie", methods=["GET"])
 def movie_get():
-    movie_list = list(db.movie.find({}, {"_id": False}))
+    # movie_list = list(db.movie.find({}, {"_id": False}))
+    movie_list = list(db.moviecur.find({}, {"_id": False}))
     return jsonify({"movie_list": movie_list})
 
-
+# 네이버영화 문 닫아서 지우면 안돼요. 되도록이면 지우지 마세요!!!
 @app.route("/movie/delete", methods=["POST"])
 def movie_delete():
     num_receive = request.form["num_give"]
     # -----------fetch함수를 사용하여 서버로 넘어올 때는 데이터베이스에 넘어가기 직전의 JSON형태로 변환시켜주기 때문에 숫자는 문자화가 되서 넘어와진다. 그래서 int메서드로 다시 정수형으로 바꿔준다.------------
     # https://www.daleseo.com/js-json/ JSON 숫자 변형과 관련된 블로그
     num = int(num_receive)
-    db.movie.delete_one({"num": num})
+    # db.movie.delete_one({"num": num})
+    db.moviecur.delete_one({"num": num})
     return jsonify({'msg': "삭제 완료!"})
 
 
@@ -138,7 +142,8 @@ def movie_edit():
     num_receive = request.form["num_give"]
     comment_receive = request.form["comment_give"]
     num = int(num_receive)
-    db.movie.update_one({"num": num},{"$set",{"comment": comment_receive}})
+    # db.movie.update_one({"num": num},{"$set",{"comment": comment_receive}})
+    db.moviecur.update_one({"num": num},{"$set",{"comment": comment_receive}})
     return jsonify({'msg': "수정 완료!"})
 
 # 회원가입 
@@ -172,7 +177,7 @@ def api_login():
 			'id': id_receive,
 			'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
 			'nickname': result['nick']
-        }
+		}
 		token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 		return jsonify({'result': 'success', 'token': token, 'nickname': result['nick']})
 	else:
@@ -190,12 +195,18 @@ def review_post():
     star_receive = request.form['star_give']
     comment_receive = request.form['comment_give']
     nickname_receive= request.form['nickname_give']
+    num_receive= request.form['num_give']
+    num = int(num_receive)
+    
+
 
 
     doc={
+        '_id': ObjectId(),  ## 문자형
         'star':star_receive,
         'comment':comment_receive,
-        'nickname':nickname_receive
+        'nickname':nickname_receive,
+        'num': num
     }
 
     db.review.insert_one(doc)
@@ -203,16 +214,31 @@ def review_post():
     return jsonify({'msg':'저장 완료!'})
 
 # 이거도 일단 주석처리@@@
-@app.route("/review/getcomment", methods=["GET"])
-def review_get():
-    all_reviews = list(db.review.find({},{'_id':False}))
+@app.route("/review/getcomment/<int:num>", methods=["GET"])
+def review_get(num):
+    int(num)  ## num = int(num) ?
+    print(num)
+    all_reviews = list(db.review.find({"num":num}))
+    
+    for review in all_reviews:
+        review['_id'] = str(review['_id'])
+    print(all_reviews)
+    # all_reviews = list(db.review.find({},{'_id':False}))
     # return render_template('review.index.html')
     return jsonify({'result':all_reviews})
 
-@app.route('/review/<string:nickname>', methods=['DELETE']) 
-def nickname_del(nickname): 
-    db.review.delete_one({'nickname': nickname}) 
+# @app.route('/review/<string:nickname>', methods=['DELETE']) 
+# def nickname_del(nickname): 
+#     db.review.delete_one({'nickname': nickname}) 
+#     return jsonify({'msg': '삭제완료!'})
+
+@app.route('/review/<string:id>', methods=['DELETE'])
+def review_delete(id):
+    print(f"딜리트: {id}")
+    print(type(id))
+    db.review.delete_one({'_id': ObjectId(id)})
     return jsonify({'msg': '삭제완료!'})
+
 
 @app.route('/review')
 def review_get_url_and_crawl():
@@ -231,13 +257,15 @@ def review_get_url_and_crawl():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
     res = requests.get(url_give, headers= headers)
     soup = BeautifulSoup(res.text, 'html.parser')
-    print(soup)
-    g = soup.select_one('dl > div:nth-child(1) > dd') ## 영화 장르  
+    # print(soup)
+    g = soup.select_one('dl > div:nth-child(1) > dd') ## 영화 장르  : text가 있고 span태그가 있고 그 사이에 텍스트가 또 있음.
     o = soup.select_one('dl > div:nth-child(2) > dd') ## 영화 개봉일
-    print(g.text)
-    genre = g.text.split()[0].strip() ## split("") = > split() 로 변경했음.
+    
+    g = str(g) ## dd 부분 전체를 스트링으로 바꿔서 
     opening = o.text.strip()
-    ul["genre"] = genre  ## 옵젝에 추가  
+    get_genre = re.search(r'<dd>(.*?)<span', g)  ## <dd>여기부분만꺼내오기<span
+
+    ul["genre"] = get_genre[1]  ## 옵젝에 추가  
     ul["opening"] = opening
     # Box = {"genre": genre, "opening": opening}
     # for g, o in zip(genre, opening):
@@ -263,7 +291,7 @@ def review_get_url_and_crawl():
 
     ## postBox + 장르, 오프닝
     ## 얘네를 진자?방식으로 한꺼번에 넘긴다.
-    return render_template('review_index.html', Box = url_receive)
+    return render_template('review_index.html', Box = ul)
 
 # @app.route('/page1')
 # def page1():

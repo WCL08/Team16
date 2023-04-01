@@ -1,3 +1,14 @@
+* {
+  font-family: 'Jua', sans-serif;
+}
+
+body {
+  background: url("https://lh5.googleusercontent.com/proxy/xvtq6_782kBajCBr0GISHpujOb51XLKUeEOJ2lLPKh12-xNBTCtsoHT14NQcaH9l4JhatcXEMBkqgUeCWhb3XhdLnD1BiNzQ_LVydwg=w3840-h2160-p-k-no-nd-mv");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height:100vh;
+}
 #auth-container {
   position: absolute;
   font-family: sans-serif;
@@ -24,7 +35,7 @@
   height: fit-content;
   color: #669900;
 }
-
+.poster
 /* tabs -> tab / tabcontent */
 .tabs {
   padding: 5px 15px 0 15px;
@@ -119,6 +130,8 @@ textarea:focus, input:focus{
   bottom: 20px;
   right: 20px;
   display: none;
+  font-size: 60px;
+
 }
 
 .material-symbols-rounded {
@@ -127,4 +140,15 @@ textarea:focus, input:focus{
 
 }
 
+.rb_star{
+  bottom: 45px;
+  position: absolute;
+  right: 15px;
+}
+
+.rb_button{
+  position: absolute;
+  bottom: 5px;
+  right: 9px
+}
 

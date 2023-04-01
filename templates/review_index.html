@@ -16,16 +16,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <script>
-        app.set('view engine','ejs');
-
-        function open_box() {
-            $('#review_box').show()
-        }
-        function close_box() {
-            $('#review_box').hide()
-        }
+        // app.set('view engine','ejs');  >>>> 뭐임?
+        //....
+        // function open_box() {
+        //     $('#review_box').show()
+        // }
+        // function close_box() {
+        //     $('#review_box').hide()
+        // }
 
         // function review_posting(num) {
         //     window.location.href = `/review/${num}`
@@ -59,95 +61,72 @@
         //             }
         // "7.41" >>> 74.1
         // <strong class="movie_sub_title" title="서브타이틀">woongnami, 2023</strong> 여기 없앴음.
-        // style="width:{{Box["star_count"]*10}}%"   >>> 만약에 여기서 문제 발생하면  "width:{{Box.star_count}*10}%"
+        // /// 미친 jinja2가 주석 처리 안의 진자 방식도 봐서 없애야 함. ㅡㅡ
         // <span>
         //     <a href="/movie/sdb/browsing/bmovie.naver?genre=11">코미디</a>
         //     ,
         //     <a href="/movie/sdb/browsing/bmovie.naver?genre=19">액션</a>
         // </span>          //>>> 여기도 수정했음.
         function listing() {
+            console.log(`{{Box}}`)
+            console.log(`{{Box.num}}`)
+            console.log(`{{Box.title}}`)
+            console.log(`{{Box.image}}`)
+            console.log(`{{Box.star_count}}`)
+            console.log(`{{Box.comment}}`)
+            console.log(`{{Box.desc}}`)
+            console.log(`{{Box.url}}`)
+            console.log(`{{Box.genre}}`)
+            console.log(`{{Box.opening}}`)
+            $('#post_wrap').empty();
+            let star = Number(`{{Box.star_count}}`) * 10  // >>> 이거 체크 해봐야 함.!!!!!!!!!!!
             let temp_html = `<div class="card-wrapper" >
                                 <div class="movie_info_area" style="display: block;">
                                     <div class="movie_info" >
-                                        <h3 class="movie_title">
-                                            <!-- 링크, 제목 -->
-                                            <a href="./basic.naver?code=217747">{{Box.title}}</a>
-                                        </h3>
-                                        <!-- 관람객, 기자.평론가 점수 / 별 잘 모르겠습니다..-->
+                                            <h3 class="movie_title">
+                                                <!-- 링크, 제목 -->
+                                                <a class="movie_title_text" href="./basic.naver?code=217747">{{Box.title}}</a>
+                                            </h3>
+                                            <!-- 관람객, 기자.평론가 점수 / 별 잘 모르겠습니다..-->
                                         <div class="main_score">
                                             <div class="info_score">관람객 평점</div>
                                             <div class="star_score">
                                                 <span class="st_off">
-                                                    <span class="st_on" style="width:{{Box["star_count"]*10}}%"></span>
+                                                    <span class="st_on" style="width: ${star}%"></span>
                                                 </span>
-                                                <span>{{Box.star_count}}<span>
-                                            </span>
-                                        </span>
-                                        <!-- 개요 - 장르, 개봉일자 -->
+                                                <span class="st_text">
+                                                    {{Box.star_count}}
+                                                </span>
+                                                <!-- 개요 - 장르, 개봉일자 -->
+                                            </div>
+                                        </div>
                                         <dl class="info_spec">
                                             <dt class="step1">
                                                 <em>개요</em>
                                             </dt>
                                             <dd>
-                                                <p>
-                                                    <span>
-                                                       {{Box.genre}}
-                                                    </span>
+                                                <span>
+                                                    <span>{{Box.genre}}</span>
                                                     <span class="line"> | </span>
-                                                    <span>
-                                                        {{Box.opening}}
-                                                        개봉
-                                                    </span>
-                                                </p>
+                                                    <span>{{Box.opening}} 개봉</span>
+                                                </span>
                                             </dd>
                                         </dl>
+                                        <div class="desc_css">
+                                            {{Box.desc}}
+                                        </div>
                                     </div>
+                                    <!-- 영화 포스터 -->
                                 </div>
-
-                                <!-- 영화 포스터 -->
-                                    <a href="#" onclick="" class="poster">
-                                        <img src="{{Box.image}}" alt="{{Box.title}}" >
-                                    </a>
-                                </div>
+                                <a class="poster" >
+                                    <img src="{{Box.image}}" alt="{{Box.title}}" >
+                                </a>
                             </div>
-
-
-
-                            <!-- 영화 리뷰 작성하기 -->
-                            <div class="review_btn">
-                                <button onclick="open_box()">영화 기록하기</button>
-                            </div>
-
-                            <div class="myreview_write" id="review_box">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">닉네임</span>
-                                    <input id="nickname" type="text" class="form-control" aria-label="Sizing example input"
-                                        aria-describedby="inputGroup-sizing-default">
-                                </div>
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text" for="inputGroupSelect01">별점</label>
-                                    <select class="form-select" id="star">
-                                        <option selected>-- 선택하기 --</option>
-                                        <option value="1">⭐</option>
-                                        <option value="2">⭐⭐</option>
-                                        <option value="3">⭐⭐⭐</option>
-                                        <option value="4">⭐⭐⭐⭐</option>
-                                        <option value="5">⭐⭐⭐⭐⭐</option>
-                                    </select>
-                                </div>
-                                <div class="form-floating">
-                                    <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
-                                    <label for="floatingTextarea2">후기를 작성해주세요</label>
-                                </div>
-                                <div class="myreview_btns">
-                                    <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>
-                                    <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
-                                </div>
-                            </div>`
+                            `
             
             $('#post_wrap').append(temp_html)
         }                    
-
+    
 
             // fetch('/movie').then((res) => res.json()).then((data) => {
             //     let rows = data['movie']
@@ -233,14 +212,18 @@
             //     $("#putName").append(getHtml)
             // }
         function getReview() {
-            fetch('/review/getcomment').then((res) => res.json()).then((data) => {
+            let num = Number(`{{Box.num}}`)
+            console.log(num)
+            fetch(`/review/getcomment/${num}`).then((res) => res.json()).then((data) => {
                 let rows = data['result']
+                console.log(rows)
                 $('#comment-list').empty()
                 rows.forEach((a) => {
                     let comment = a['comment']
                     let star = a['star']
                     let nickname = a['nickname']
-
+                    let id = a['_id']
+                    console.log(id)
                     let star_repeat = '⭐'.repeat(star)
 
                     // 로그인 닉네임을 가져올 수 있을까요?--------------------------------
@@ -250,22 +233,11 @@
                                             <blockquote class="blockquote mb-0">
                                                 <p>${star_repeat}</p>
                                                 <p class="mycomment">${comment}</p>
-                                                
+                                                <p>${nickname}</p>
                                             </blockquote>
-                                            <button onclick="del_review('${nickname}')" type="button" class="btn btn-outline-danger">삭제</button>
+                                            <button onclick="del_review('${id}')" type="button" class="btn btn-outline-danger">삭제</button>
                                         </div>
                                     </div>`
-                    // let temp_html = ` <div class="card">
-                    //                     <div class="card-body">
-                    //                         <blockquote class="blockquote mb-0">
-                    //                             <p>${star_repeat}</p>
-                    //                             <p class="mycomment">${comment}</p>
-                    //                             <footer class="blockquote-footer">${nickname}</footer>   
-                    //                         </blockquote>
-                    //                         <button onclick="del_review('${nickname}')" type="button" class="btn btn-outline-danger">삭제</button>
-                    //                     </div>
-                    //                 </div>`
-
                     $('#comment-list').append(temp_html)
                 })
             })
@@ -275,22 +247,30 @@
             let comment = $('#comment').val()
             let star = $('#star').val()
             let nickname = $('#nickname').val()
+            let num = `{{Box.num}}`  // >>> 포스트 고유 넘버.
 
             let formData = new FormData();
             formData.append("star_give", star);
             formData.append("comment_give", comment);
             formData.append("nickname_give", nickname);
+            formData.append("num_give", num);
+            
 
             fetch('/review', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
                 alert(data['msg'])
-                window.location.reload()
+                // window.location.reload() >>> empty 있어서 리로딩 안해도 바로 바뀌어짐.
+                getReview();
             })
         }
 
-        function del_review(nickname) {
-            fetch(`/review/${nickname}`, { method: 'DELETE' }).then(res => res.json()).then(data => { console.log(data); listing(); });
+        function del_review(id){
+            console.log(id)
+            fetch(`/review/${id}`, { method: 'DELETE' })
+                .then(res => res.json())
+                .then(data => {
+                getReview();
+            });
         }
-
 
     </script>
 
@@ -298,28 +278,51 @@
     <style>
         a{
             text-decoration: none;
-            color: rgb(34, 34, 34);
+            color: white;
         }
 
         .card-wrapper {
             display: flex;
             justify-content: center;
+            margin-top: 30px;
         }
 
         .card-body {
             display: flex;
             justify-content: space-between;
         }
-
+        .st_on {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            background: url("https://ssl.pstatic.net/sstatic/keypage/outside/scui/cs_common_module/img/sp_area_decimal_star_v2.png") no-repeat;
+            background-size: 94px 55px;
+            background-position: 0 0;
+        }
         .st_off {
-            width: 122px;
+            display: inline-block;
+            position: relative;
+            width: 98px;
+            height: 17px;
+            background: url("https://ssl.pstatic.net/sstatic/keypage/outside/scui/cs_common_module/img/sp_area_decimal_star_v2.png") no-repeat;
+            background-size: 94px 55px;
+            background-position: 0 -19px;
+        }
+        .st_text {
+            padding-left: 5px;
+            line-height: 1.2;
         }
 
-        .st_off,
+        /* .st_off,
         .st_off span {
             display: inline-block;
             height: 22px;
-            /* overflow: hidden; */
+            overflow: hidden;
             background: url(static/star.png)no-repeat
         }
 
@@ -327,18 +330,19 @@
             background-position: left bottom;
             line-height: 0;
             vertical-align: top;
-        }
+        } */
 
         .star_score {
-            /* width: 50px; */
-            height: 22px;
+            display: flex;
+            width: fit-content;
+            height: fit-content;
 
         }
 
         .main_score {
             display: flex;
-            align-items: baseline;
-            align-content: center;
+            align-items: center;
+            /* align-content: center; */
         }
 
         .info_score {
@@ -347,18 +351,70 @@
         .poster{
             margin-top: 20px;
         }
+
+        .desc_css{
+            border-top: 1px solid #f0f0f0;
+            margin-top: 0px;
+            padding: 10px;
+            max-width: 440px;
+        }
+        .reviewwrite-box{
+            margin-top: 60px;
+        }
+
+        .back_to_home {
+            position: fixed;
+            right: 37px;
+            bottom: 26px;
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 5px;
+            color:white;
+            font-size: larger;
+        }
         
     </style>
 
 
 </head>
 
+<!-- 
+from bson import ObjectId
+
+
+
+       '_id': ObjectId(),
+
+@app.route('/review/<string:id>', methods=['DELETE'])
+def movie_delete(id):
+    result = db.movies.delete_one({'_id': ObjectId(id)})
+    for movie in all_movies:
+        movie['_id'] = str(movie['_id'])  # convert ObjectId to string
+
+
+    function deleteReview(id) {
+      fetch(`/review/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+          listing();
+        });
+    }
+
+
+                        let id = a['_id']
+
+                        
+                          <button class="btn btn-outline-danger" onclick="deleteMovie('${id}')">Delete</button>
+     -->
+
+
+
 <body>
     <!-- 커버 -->
     <div class="review_pic">
         <h1>영화 리뷰</h1>
     </div>
-    <div class="article" name="post_wrap">
+    <div class="article" id="post_wrap">
         <!-- 영화정보 -->
         <div class="card-wrapper" >
             <div class="movie_info_area" style="display: block;">
@@ -412,14 +468,15 @@
                 </a>
             </div>
         </div>
-
+    </div>
 
 
         <!-- 영화 리뷰 작성하기 -->
-        <div class="review_btn">
+    <div class="reviewwrite-box">
+        <!-- <div class="review_btn">
             <button onclick="open_box()">영화 기록하기</button>
-        </div>
-
+        </div> -->
+    
         <div class="myreview_write" id="review_box">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">닉네임</span>
@@ -443,10 +500,9 @@
             </div>
             <div class="myreview_btns">
                 <button onclick="posting()" type="button" class="btn btn-dark">기록하기</button>
-                <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button>
+                <!-- <button onclick="close_box()" type="button" class="btn btn-outline-dark">닫기</button> -->
             </div>
         </div>
-
     </div>
 
     <!-- 영화 리뷰 카드 -->
@@ -462,9 +518,12 @@
             </div>
         </div>
     </div>
-
-
+    <div>
+        <a class="back_to_home" href="/">Home</a>
     </div>
+
+
+    <!-- </div> -->
 
 </body>
 

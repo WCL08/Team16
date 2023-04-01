@@ -43,9 +43,16 @@ input {
 
 
 * {
-    font-family: "Noto Serif KR", serif;
+    font-family: 'Jua', sans-serif;
 }
 
+body {
+    background: url("https://lh5.googleusercontent.com/proxy/xvtq6_782kBajCBr0GISHpujOb51XLKUeEOJ2lLPKh12-xNBTCtsoHT14NQcaH9l4JhatcXEMBkqgUeCWhb3XhdLnD1BiNzQ_LVydwg=w3840-h2160-p-k-no-nd-mv");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height:100vh;
+}
 
 .review_pic {
     width: 100%;
@@ -78,9 +85,11 @@ input {
 .movie_info {
     display: table;
     position: relative;
+    color: white;
+    font-size: larger;
     /* width: 500px; */
 }
-
+    
 .main_score {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -116,6 +125,8 @@ input {
     padding: 10px 0;
     border-top: 1px solid #f0f0f0;
     zoom: 1;
+    margin-top: 0px;
+    margin-bottom: -10px;
 }
 
 .step1 {
@@ -134,8 +145,8 @@ input {
     position: relative;
     min-width: 160px;
     min-height: 220px;
-    max-width: 203px;
-    max-height: 290px;
+    max-width: fit-content;
+    max-height: fit-content;
 
     margin-top: 60px;
 }
