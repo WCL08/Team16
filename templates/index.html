@@ -191,9 +191,9 @@
             /* 하이퍼링크 파란글씨, 밑줄 없애기  */
             a {
                 text-decoration: none;
-                color: inherit;
+                color: initial;
                 cursor: pointer;
-                color: white;
+                /* 여기 색깔 흰색 지정 있어서 하이퍼링크 글자 안보이길래 지움 */
             }
 /* ------------------------------------------------------------------------------------------------- */
             .mytitle {
@@ -318,15 +318,17 @@
                                 "desc": desc,
                                 "url": url
                             }
-                            const myObject = { a:1 };
+                            // --------------얘네 주석 처리 안했었음 ...;;--------------------
+                            // const myObject = { a:1 };   
                             const queryParams = new URLSearchParams();
-                            queryParams.append('data', JSON.stringify(myObject));
-                            window.location.href = '/review?' + queryParams.toString();
+                            queryParams.append('data', JSON.stringify(postBox));
+                            // window.location.href = '/review?' + queryParams.toString();
                             let star = "⭐".repeat(star_count);
-                            "/review?post=${postBox}"
+                            // "/review?post=${postBox}"
                             // src = "${image}" 가 아니라 그냥 src = ${image} 해도 오류 발생 안하네?!
                             // 문제되면 이 밑에 jinja2 방식으로 서버로 넘길 때 문제임.
-                            let temp_html = `<a href="#" onclick="window.location.href = '/review?' + queryParams.toString()">
+                            // "window.location.href = '/review?'+ queryParams.toString()}"
+                            let temp_html = `<a href="/review?${queryParams.toString()}" >
                                                 <div class="col">
                                                     <div class="card h-100">
                                                         <img src="${image}"

@@ -219,8 +219,8 @@ def review_get_url_and_crawl():
     # data = request.args.get('data') / ?data=
     # myObject = json.loads(data) >>> object 형태 {} 가 됨.
     # url_receive = request.args.get('post')
-    url_receive = request.args.get('post')  ## >>> Object 형태
-    ul = json.loads(url_receive) 
+    url_receive = request.args.get('data')  ## >>> Json형태 Object 형태
+    ul = json.loads(url_receive) ## >>> JSON을 풀어 decode해서 Object로 바꿔줌.
     url_give = ul["url"]   ## >>> url
     ## 크롤링
     # all_reviews = list(db.review.find({},{'_id':False}))
@@ -234,10 +234,11 @@ def review_get_url_and_crawl():
     print(soup)
     g = soup.select_one('dl > div:nth-child(1) > dd') ## 영화 장르  
     o = soup.select_one('dl > div:nth-child(2) > dd') ## 영화 개봉일
-    genre = g.text.split("")[0].strip()
+    print(g.text)
+    genre = g.text.split()[0].strip() ## split("") = > split() 로 변경했음.
     opening = o.text.strip()
-    url_receive["genre"] = genre  ## 옵젝에 추가  
-    url_receive["opening"] = opening
+    ul["genre"] = genre  ## 옵젝에 추가  
+    ul["opening"] = opening
     # Box = {"genre": genre, "opening": opening}
     # for g, o in zip(genre, opening):
     #     print(g.text.strip(), o.text.strip(), sep="\t"*2)
@@ -251,7 +252,7 @@ def review_get_url_and_crawl():
     #                         "star_count": star_count,
     #                         "comment": comment,
     #                         "desc": desc,
-    #                         "url": url
+    #                         "url": url,
                             # "genre": genre, "opening": opening
 
     #                     }
@@ -262,7 +263,7 @@ def review_get_url_and_crawl():
 
     ## postBox + 장르, 오프닝
     ## 얘네를 진자?방식으로 한꺼번에 넘긴다.
-    return render_template('review.html', Box = url_receive)
+    return render_template('review_index.html', Box = url_receive)
 
 # @app.route('/page1')
 # def page1():

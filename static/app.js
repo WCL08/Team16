@@ -139,9 +139,9 @@ $(document).ready(async function () {
   if (flag === true) {
     await crawling();
     await listing();
-} else {
+  } else {
     await listing();
-}
+  }
 
   $('.tab').eq(0).click(function () {
     $('#login-section').show();
