@@ -11,6 +11,7 @@ import hashlib
 #
 from pymongo import MongoClient
 from flask import Flask, render_template, request, jsonify
+import re
 
 app = Flask(__name__)
 
@@ -234,9 +235,12 @@ def review_get_url_and_crawl():
     print(soup)
     g = soup.select_one('dl > div:nth-child(1) > dd') ## 영화 장르  
     o = soup.select_one('dl > div:nth-child(2) > dd') ## 영화 개봉일
-    genre = g.text.split("")[0].strip()
+    
+    g = str(g) ## dd 부분 전체를 스트링으로 바꿔서 
     opening = o.text.strip()
-    url_receive["genre"] = genre  ## 옵젝에 추가  
+    get_genre = re.search(r'<dd>(.*?)<span', g)  ## <dd>여기부분만꺼내오기<span
+
+    url_receive["genre"] = get_genre[1]  ## 옵젝에 추가  
     url_receive["opening"] = opening
     # Box = {"genre": genre, "opening": opening}
     # for g, o in zip(genre, opening):
