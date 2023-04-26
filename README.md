@@ -23,5 +23,6 @@ db = client.movie
 2. db.flag 저장된 데이터 =>  첫 로딩이면 {"flag":{'flag': True}} or 이전에 로딩 했으면 {"flag":{'flag': False}}
 
 # 영상 추가
-https://youtu.be/QyJuQiZQCY4
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QyJuQiZQCY4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
 
